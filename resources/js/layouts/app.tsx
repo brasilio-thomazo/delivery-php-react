@@ -19,16 +19,12 @@ export default (props: Properties) => {
             <InertiaLink href="/" className="navbar-brand">
               Delivery v1.0.3
             </InertiaLink>
-            <button
-              className="navbar-toggler"
-              data-bs-toggler="collapse"
-              data-bs-target="navbar"
-              type="button"
-            >
-              <span className="navbar-toogler-icon"></span>
+            <button className="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar" type="button">
+              <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse" id="navbar">
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <div className="col-auto me-auto"></div>
+              <ul className="navbar-nav col-auto mb-2 mb-lg-0">
                 <li className="nav-item">
                   <InertiaLink href="/" className="nav-link">
                     Home

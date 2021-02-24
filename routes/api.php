@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\Product\CategoryController;
+use App\Http\Controllers\Api\Product\TypeController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -22,5 +24,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::resources([
     'users' => UserController::class,
-    'products' => ProductController::class
+    'products' => ProductController::class,
+    'product/types' => TypeController::class,
+    'product/categories' => CategoryController::class
 ]);
