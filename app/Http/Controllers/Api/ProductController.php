@@ -15,7 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return response(Product::all());
+        return response(Product::with(['type', 'category'])->get()->all());
     }
 
     /**

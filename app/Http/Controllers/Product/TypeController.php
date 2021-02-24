@@ -38,7 +38,7 @@ class TypeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'min:3', 'unique:product_types']
+            'name' => ['required', 'min:3', 'unique:product_types'],
         ]);
         $productType = new ProductType($request->all());
         $productType->save();
@@ -76,7 +76,17 @@ class TypeController extends Controller
      */
     public function update(Request $request, ProductType $productType)
     {
-        //
+        if ($request->name == $productType->name) {
+            return Redirect::route('products.index');
+        }
+
+        $request->validate([
+            'name' => ['required', 'min:3', 'unique:product_types'],
+        ]);
+
+        $productType->update($request->only(['name']));
+        return Redirect::route('products.index');
+
     }
 
     /**

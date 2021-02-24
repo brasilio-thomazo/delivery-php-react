@@ -20,20 +20,17 @@ export default ({ products, p_types, p_categories, errors }) => {
       cost: 0,
       price: 0,
     },
+    onSubmit: (data) => {
+      if (data.id > 0) Inertia.put(`/products/${data.id}`, data);
+      else Inertia.post("/products", data);
+    },
   });
 
-  const numberFormat = (value) => {
-    console.log(value, typeof value);
-    if (!/^[\d]$/.test(value)) {
-      return "";
-    }
-    return new Intl.NumberFormat("pt-br", {
-      style: "currency",
-      currency: "BRL",
-    }).format(value);
-  };
+  const { resetForm, handleSubmit, getFieldProps, values, setFieldValue, setValues } = formik;
 
-  const { resetForm, handleSubmit, getFieldProps, values, handleChange, setFieldValue } = formik;
+  const handleEdit = (data) => {
+    setValues(data);
+  };
 
   return (
     <Layout title="Produtos::Optimus - Delivery v1.0.3">
@@ -104,18 +101,32 @@ export default ({ products, p_types, p_categories, errors }) => {
           </div>
           <div className="row mb-3">
             <div className="col-sm">
+              <label htmlFor="description" className="form-label">
+                Descri&ccedil;&atilde;o
+              </label>
+              <textarea
+                id="description"
+                cols="30"
+                rows="3"
+                className="form-control"
+                {...getFieldProps("description")}
+              ></textarea>
+            </div>
+          </div>
+          <div className="row mb-3">
+            <div className="col-sm">
               <label htmlFor="cost" className="form-label">
                 Custo
               </label>
               <NumberFormat
                 className="form-control"
+                value={parseFloat(values.cost)}
                 id="cost"
                 name="cost"
                 decimalScale={2}
                 decimalSeparator=","
                 prefix="R$ "
                 fixedDecimalScale={true}
-                value={values.price}
                 allowNegative={false}
                 onValueChange={(v) => setFieldValue("cost", v.floatValue)}
               />
@@ -135,11 +146,10 @@ export default ({ products, p_types, p_categories, errors }) => {
                 decimalSeparator=","
                 prefix="R$ "
                 fixedDecimalScale={true}
-                value={values.price}
+                value={parseFloat(values.price)}
                 allowNegative={false}
                 onValueChange={(v) => setFieldValue("price", v.floatValue)}
               />
-              {values.price}
               <div className="form-text text-danger">
                 {errors?.price && <div className="form-text text-danger">{errors.price}</div>}
               </div>
@@ -158,7 +168,7 @@ export default ({ products, p_types, p_categories, errors }) => {
             </div>
           </div>
         </form>
-        <Products products={products} />
+        <Products products={products} onEdit={handleEdit} />
         <ModalTypes types={p_types} errors={errors} />
         <ModalCategories categories={p_categories} errors={errors} />
       </React.Fragment>

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Product;
 
-use App\Http\Controllers\Controller;
-use App\Models\ProductCategory;
 use Illuminate\Http\Request;
+use App\Models\ProductCategory;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
 
 class CategoryController extends Controller
 {
@@ -36,7 +37,12 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'min:3', 'unique:product_types'],
+        ]);
+        $productCategory = new ProductCategory($request->all());
+        $productCategory->save();
+        return Redirect::route('products.index');
     }
 
     /**
@@ -70,7 +76,16 @@ class CategoryController extends Controller
      */
     public function update(Request $request, ProductCategory $productCategory)
     {
-        //
+        if ($request->name == $productCategory->name) {
+            return Redirect::route('products.index');
+        }
+
+        $request->validate([
+            'name' => ['required', 'min:3', 'unique:product_categories'],
+        ]);
+
+        $productCategory->update($request->only(['name']));
+        return Redirect::route('products.index');
     }
 
     /**
