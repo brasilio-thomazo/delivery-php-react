@@ -2,8 +2,6 @@ import React from "react";
 import InputMask from "react-input-mask";
 import { places } from "../../services/api";
 import { usePage } from "@inertiajs/inertia-react";
-//const mbxClient = require("@mapbox/mapbox-sdk");
-//const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 
 export const FormClient = (props) => {
   const { formik } = props;
@@ -33,8 +31,6 @@ export const FieldsClient = (props) => {
   const phoneChange = (evt) => setFieldValue(evt.target.id, evt.target.value.replace(/[^\d]/g, ""));
 
   const [suggestions, setSuggestions] = React.useState([]);
-  //const baseClient = mbxClient({ accessToken: mbxToken });
-  //const geocoding = mbxGeocoding(baseClient);
 
   const handleSuggestionChange = ({ target }) => {
     const value = target.value;
@@ -46,24 +42,6 @@ export const FieldsClient = (props) => {
           setSuggestions(response.data.features);
         })
         .catch(console.error);
-      /*
-      geocoding
-        .forwardGeocode({
-          query: value,
-          countries: ["br"],
-          types: ["address"],
-          language: ["pt"],
-          proximity: [-46.76467682916416, -23.499345647600578],
-        })
-        .send()
-        .then((response) => {
-          arr = response.body.features; // place_name
-          console.log(arr);
-          setSuggestions(arr);
-        })
-        .catch((err) => {
-          console.log(err);
-        });*/
     }
     setFieldValue(target.id, value);
   };

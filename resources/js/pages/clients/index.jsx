@@ -1,13 +1,12 @@
-import React, { ChangeEvent, FormEvent, SyntheticEvent } from "react";
+import React, { useEffect } from "react";
 import Layout from "../../layouts/app";
 import { Inertia } from "@inertiajs/inertia";
-import { InertiaLink, usePage } from "@inertiajs/inertia-react";
+import { usePage } from "@inertiajs/inertia-react";
 import { useFormik } from "formik";
-import axios from "axios";
-
 import { FormClient, Clients } from "../../components/clients";
 
 export default (props) => {
+  const { flash } = usePage().props;
   const { errors, clients } = props;
   const formik = useFormik({
     initialValues: {
@@ -24,7 +23,11 @@ export default (props) => {
     },
   });
 
-  formik.handleChange;
+  useEffect(() => {
+    Inertia.on("finish", () => {
+      if (flash.success) formik.resetForm();
+    });
+  });
 
   const handleEdit = (data) => formik.setValues(data);
   const handleDelete = (id) => Inertia.delete(`/clients/${id}`);

@@ -113,7 +113,7 @@ class ClientController extends Controller
             $client->update($request->only(['name', 'phone', 'address', 'addr_number', 'addr_complement']));
         }
 
-        return Redirect::route('clients.index');
+        return Redirect::route('clients.index')->with('success', ['client' => $client]);
     }
 
     /**
@@ -124,6 +124,8 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        //
+        $client->delete();
+        return Redirect::route('clients.index')->with('success', ['client' => $client]);
+
     }
 }

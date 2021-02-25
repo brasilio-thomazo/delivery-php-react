@@ -16,8 +16,23 @@
       list-style: none;
       padding: 5px 5px;
       border-radius: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       &:hover {
         background-color: royalblue;
+      }
+    }
+  }
+}
+
+div.table-clients {
+  table {
+    tbody {
+      td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }
