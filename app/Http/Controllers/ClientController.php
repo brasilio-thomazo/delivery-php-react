@@ -55,7 +55,7 @@ class ClientController extends Controller
 
         $client = new Client($request->only(['name', 'phone', 'address', 'addr_number', 'addr_complement']));
         $client->save();
-        return Redirect::route('clients.index');
+        return Redirect::route('clients.index')->with('success', ['client' => $client]);
     }
 
     /**

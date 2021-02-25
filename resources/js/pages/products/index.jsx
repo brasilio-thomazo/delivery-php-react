@@ -7,7 +7,6 @@ import { ModalCategories } from "../../components/products/categories";
 import { useFormik } from "formik";
 import _ from "lodash";
 import NumberFormat from "react-number-format";
-import CurrencyInput from "react-currency-input-field";
 
 export default ({ products, p_types, p_categories, errors }) => {
   const formik = useFormik({

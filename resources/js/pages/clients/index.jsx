@@ -1,11 +1,14 @@
 import React, { ChangeEvent, FormEvent, SyntheticEvent } from "react";
 import Layout from "../../layouts/app";
 import { Inertia } from "@inertiajs/inertia";
+import { InertiaLink, usePage } from "@inertiajs/inertia-react";
 import { useFormik } from "formik";
+import axios from "axios";
 
 import { FormClient, Clients } from "../../components/clients";
 
-export default ({ errors, clients }) => {
+export default (props) => {
+  const { errors, clients } = props;
   const formik = useFormik({
     initialValues: {
       id: -1,

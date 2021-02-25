@@ -1,5 +1,9 @@
 import React from "react";
 import InputMask from "react-input-mask";
+import { places } from "../../services/api";
+import { usePage } from "@inertiajs/inertia-react";
+//const mbxClient = require("@mapbox/mapbox-sdk");
+//const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 
 export const FormClient = (props) => {
   const { formik } = props;
@@ -23,9 +27,52 @@ export const FormClient = (props) => {
 };
 
 export const FieldsClient = (props) => {
+  const { mbxToken } = usePage().props;
   const { formik, errors } = props;
-  const { getFieldProps, values, setFieldValue, setValues } = formik;
+  const { getFieldProps, values, setFieldValue } = formik;
   const phoneChange = (evt) => setFieldValue(evt.target.id, evt.target.value.replace(/[^\d]/g, ""));
+
+  const [suggestions, setSuggestions] = React.useState([]);
+  //const baseClient = mbxClient({ accessToken: mbxToken });
+  //const geocoding = mbxGeocoding(baseClient);
+
+  const handleSuggestionChange = ({ target }) => {
+    const value = target.value;
+    if (value.length === 0) setSuggestions([]);
+    else if (value.length % 5 == 0) {
+      places
+        .search(value, mbxToken)
+        .then((response) => {
+          setSuggestions(response.data.features);
+        })
+        .catch(console.error);
+      /*
+      geocoding
+        .forwardGeocode({
+          query: value,
+          countries: ["br"],
+          types: ["address"],
+          language: ["pt"],
+          proximity: [-46.76467682916416, -23.499345647600578],
+        })
+        .send()
+        .then((response) => {
+          arr = response.body.features; // place_name
+          console.log(arr);
+          setSuggestions(arr);
+        })
+        .catch((err) => {
+          console.log(err);
+        });*/
+    }
+    setFieldValue(target.id, value);
+  };
+
+  const handleSelectSuggestion = (data) => {
+    setFieldValue("address", data.place_name);
+    setSuggestions([]);
+  };
+
   return (
     <React.Fragment>
       <div className="row mb-3">
@@ -57,7 +104,24 @@ export const FieldsClient = (props) => {
           <label htmlFor="address" className="form-label">
             Endere&ccedil;o:
           </label>
-          <input type="text" className="form-control" id="address" {...getFieldProps("address")} />
+          <div className="autocomplete">
+            <input
+              type="text"
+              className="form-control"
+              id="address"
+              onChange={handleSuggestionChange}
+              value={values.address}
+            />
+            {suggestions.length > 0 && (
+              <ul className="autocomplete-box">
+                {suggestions.map((suggestion, i) => (
+                  <li key={i} onClick={() => handleSelectSuggestion(suggestion)}>
+                    {suggestion.place_name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
           <div className="form-text text-danger">{errors?.address}</div>
         </div>
         <div className="col-sm">
