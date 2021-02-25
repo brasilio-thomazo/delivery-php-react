@@ -22,7 +22,7 @@ class ProductController extends Controller
         return Inertia::render('products', [
             'products' => Product::with(['type', 'category'])->get()->all(),
             'p_types' => ProductType::all(),
-            'p_categories' => ProductCategory::all()
+            'p_categories' => ProductCategory::all(),
         ]);
     }
 
@@ -39,8 +39,8 @@ class ProductController extends Controller
                 'required',
                 'min:3',
                 Rule::unique('products')
-                ->where('id_type', $request->id_type)
-                ->where('id_category', $request->id_category)
+                    ->where('id_type', $request->id_type)
+                    ->where('id_category', $request->id_category),
             ],
             'id_type' => ['required', 'numeric', 'gt:0'],
             'id_category' => ['required', 'numeric', 'gt:0'],
@@ -48,7 +48,7 @@ class ProductController extends Controller
             'price' => ['required', 'numeric', 'gt:0'],
         ]);
 
-        $product = new Product($request->only(['name', 'id_type', 'id_category', 'description',  'cost', 'price']));
+        $product = new Product($request->only(['name', 'id_type', 'id_category', 'description', 'cost', 'price']));
         $product->save();
         return Redirect::route('products.index');
     }
@@ -73,7 +73,31 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $validation = array();
+
+        if ($request->name != $product->name || $request->id_type != $request->id_type || $product->id_category != $request->id_category) {
+            return Redirect::route('products.index');
+            $validation['name'] = [
+                'required',
+                'min:3',
+                Rule::unique('products')
+                    ->where('id_type', $request->id_type)
+                    ->where('id_category', $request->id_category),
+            ];
+            $validation['id_type'] = ['required', 'numeric', 'gt:0'];
+            $validation['id_category'] = ['required', 'numeric', 'gt:0'];
+        }
+
+        if ($request->cost != $product->cost || $request->price != $product->price) {
+            $validation['cost'] = ['required', 'numeric', 'gt:0'];
+            $validation['price'] = ['required', 'numeric', 'gt:0'];
+
+        }
+
+        if (count($validation) > 0 || $request->description != $product->description) {
+            $product->update($request->only(['name', 'id_type', 'id_category', 'description', 'cost', 'price']));
+        }
+        return Redirect::route('products.index');
     }
 
     /**

@@ -1,15 +1,11 @@
-import React, { ReactChild } from "react";
+import React from "react";
 import { InertiaLink } from "@inertiajs/inertia-react";
 
-interface Properties {
-  title: string;
-  children: ReactChild;
-}
-
-export default (props: Properties) => {
+export default (props) => {
+  const { title, children } = props;
   React.useEffect(() => {
-    document.title = props.title;
-  }, [props.title]);
+    document.title = title;
+  }, [title]);
 
   return (
     <React.Fragment>
@@ -50,7 +46,7 @@ export default (props: Properties) => {
           </div>
         </nav>
       </header>
-      <main className="container-fluid">{props.children}</main>
+      <main className="container-fluid">{children}</main>
     </React.Fragment>
   );
 };

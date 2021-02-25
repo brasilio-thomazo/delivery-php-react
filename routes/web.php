@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Product\CategoryController;
 use App\Http\Controllers\Product\TypeController;
-use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -15,14 +16,15 @@ use Inertia\Inertia;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     return Inertia::render('homepage');
 });
 
 Route::resources([
+    'clients' => ClientController::class,
     'products' => ProductController::class,
     'product/types' => TypeController::class,
-    'product/categories' => CategoryController::class
+    'product/categories' => CategoryController::class,
 ]);
